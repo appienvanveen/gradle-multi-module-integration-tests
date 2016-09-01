@@ -1,0 +1,4 @@
+include 'child'
+rootProject.name = "grails-dummy-plugin"
+project(":child").projectDir = file("../child")
+

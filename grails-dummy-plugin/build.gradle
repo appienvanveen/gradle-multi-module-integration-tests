@@ -1,0 +1,106 @@
+buildscript {
+    ext {
+        grailsVersion = project.grailsVersion
+    }
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+    }
+}
+
+group "nl.cfp"
+
+apply plugin: "idea"
+apply plugin:"eclipse"
+apply plugin: "org.grails.grails-plugin"
+apply plugin: "org.grails.grails-gsp"
+apply plugin: "spring-boot"
+apply plugin: 'com.bertramlabs.asset-pipeline'
+
+ext {
+    grailsVersion = project.grailsVersion
+    gradleWrapperVersion = project.gradleWrapperVersion
+}
+
+
+grails {
+    exploded = true
+    plugins {
+        compile project(':child')
+    }
+}
+repositories {
+    mavenLocal()
+    maven { url "https://repo.grails.org/grails/core" }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.grails:grails-bom:$grailsVersion"
+    }
+    applyMavenExclusions false
+}
+
+dependencies {
+
+    compile 'org.grails:grails-datastore-gorm-plugin-support:3.1.5.RELEASE'
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:1.1.2.RELEASE"
+
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
+    provided "org.grails:grails-plugin-services"
+    provided "org.grails:grails-plugin-domain-class"
+    compile "org.grails:grails-dependencies"
+    compile "org.grails:grails-web-boot"
+
+    compile "org.grails.plugins:hibernate"
+    compile "org.grails.plugins:cache"
+    compile "org.hibernate:hibernate-ehcache"
+    compile "net.sf.ehcache:ehcache:2.7.2"
+
+    runtime "org.grails.plugins:asset-pipeline"
+    runtime "org.grails.plugins:scaffolding"
+
+    testCompile "org.grails:grails-plugin-testing"
+
+    console "org.grails:grails-console"
+
+    compile "org.grails:grails-logging"
+    compile "org.grails:grails-plugin-gsp"
+
+
+    testCompile "org.grails:grails-plugin-testing"
+
+    compile 'org.apache.poi:poi:3.14'
+    compile 'org.apache.poi:poi-ooxml:3.14'
+    compile 'org.grails.plugins:quartz:2.0.0'
+    compile 'net.sourceforge.jexcelapi:jxl:2.6.12'
+    compile 'org.grails.plugins:mail:2.0.0.RC6'
+
+    String springExpressionVersion = '4.1.0.RELEASE'
+    compile "org.springframework:spring-expression:$springExpressionVersion"
+
+    compile "org.springframework:spring-context-support:$springExpressionVersion"
+    compile "com.googlecode.ehcache-spring-annotations:ehcache-spring-annotations:1.2.0"
+
+    compile "org.grails.plugins:spring-security-rest-gorm:2.0.0.M2"
+    compile "org.grails.plugins:spring-security-core:3.1.1"
+    compile "org.grails.plugins:spring-security-rest:2.0.0.M2"
+    compile "org.grails.plugins:grails3-cors-interceptor:1.1.0"
+
+    testCompile "org.grails:grails-plugin-testing"
+    testCompile "org.grails:grails-datastore-rest-client"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleWrapperVersion
+}
+
+bootRepackage.enabled = false
